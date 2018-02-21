@@ -62,12 +62,14 @@ services:
             - ./docker/var/lib/mysql:/var/lib/mysql # databases files
 
     social_photos_phpmyadmin:
+        image: phpmyadmin/phpmyadmin
         container_name: social_photos_phpmyadmin
-        image: corbinu/docker-phpmyadmin
-        links:
-            - social_photos_mysql:mysql
-#        ports:
-#            - 8181:80
         environment:
-            MYSQL_USERNAME: root
-            MYSQL_ROOT_PASSWORD: root
+         - PMA_ARBITRARY=1
+        restart: always
+        ports:
+         - 8080:80
+        volumes:
+         - /sessions
+
+

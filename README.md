@@ -2,14 +2,32 @@ Social Photos
 ==========================
 Simple Symfony 3.4 application.
 
-## Setup docker environment
+## Setup project
+
+Clone repository
+
+
+Use composer to download dependencies
+```
+cd app
+composer install
+```
+
+Use these details in parameters.yml
+```
+database_host: social_photos_mysql
+database_port: 3306
+database_name: social_photos_01
+database_user: root
+database_password: root
+```
 
 Run docker compose
 ```
 docker-compose up -d
 ```
 
-Add your url to hosts file
+Add url to hosts file
 ```
 social-photos.local
 ```
@@ -27,5 +45,15 @@ TODO
 
 ## Access other serviecs
 
-Mailcatcher :8000
-PhpMyAdmin 
+
+#### Mailcatcher 
+Available at 1080 port 
+
+#### PHPMyAdmin
+Available at 8080 port
+Use these credentials:
+```
+server: social_photos_mysql
+user: root
+password: root
+```
