@@ -1,0 +1,73 @@
+
+version: '3'
+
+services:
+
+    redis:
+        container_name: redis
+        image: redis
+        restart: always
+        ports:
+            - "6379:6379"
+
+    mailcatcher:
+        container_name: mailcatcher
+        hostname: mailcatcher
+        image: schickling/mailcatcher
+        restart: always
+        ports:
+            - "1080:1080"
+
+    nginx-proxy:
+        image: jwilder/nginx-proxy
+        container_name: nginx-proxy
+        hostname: nginx-proxy
+        restart: always
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - /var/run/docker.sock:/tmp/docker.sock:ro
+
+    social_photos_php:
+        container_name: social_photos_php
+        hostname: social_photos_php
+        build: ./docker/app
+        user: root
+        volumes:
+            - ./:/var/www/html
+            - ./docker:/var/docker/
+            - ./docker/app/hosts.conf:/etc/apache2/sites-enabled/hosts.conf
+        external_links:
+            - mailcatcher
+            - redis
+        links:
+            - social_photos_mysql
+        environment:
+            - VIRTUAL_HOST=social-photos.local # For reverse-proxy
+
+    social_photos_mysql:
+        container_name: social_photos_mysql
+        image: mysql
+        hostname: social_photos_mysql
+#        ports:
+#            - "33007:3306"
+        environment:
+            - MYSQL_ROOT_PASSWORD=root
+            - MYSQL_USER=root
+            - MYSQL_PASSWORD=root
+            - MYSQL_DATABASE=social_photos_01
+        volumes:
+            # - ./docker/database:/docker-entrypoint-initdb.d # docker output for running mysqls
+            - ./docker/var/lib/mysql:/var/lib/mysql # databases files
+
+    social_photos_phpmyadmin:
+        container_name: social_photos_phpmyadmin
+        image: corbinu/docker-phpmyadmin
+        links:
+            - social_photos_mysql:mysql
+#        ports:
+#            - 8181:80
+        environment:
+            MYSQL_USERNAME: root
+            MYSQL_ROOT_PASSWORD: root
