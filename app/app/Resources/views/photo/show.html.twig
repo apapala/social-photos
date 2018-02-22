@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Photo</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ photo.id }}</td>
+            </tr>
+            <tr>
+                <th>Filename</th>
+                <td>{{ photo.filename }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('photo_index') }}">Back to the list</a>
+        </li>
+    </ul>
+{% endblock %}

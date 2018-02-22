@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Photos list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Filename</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for photo in photos %}
+            <tr>
+                <td><a href="{{ path('photo_show', { 'id': photo.id }) }}">{{ photo.id }}</a></td>
+                <td>{{ photo.filename }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('photo_show', { 'id': photo.id }) }}">show</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    
+{% endblock %}

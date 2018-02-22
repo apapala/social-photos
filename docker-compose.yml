@@ -35,7 +35,7 @@ services:
         build: ./docker/app
         user: root
         volumes:
-            - ./:/var/www/html
+            - ./app:/var/www/html
             - ./docker:/var/docker/
             - ./docker/app/hosts.conf:/etc/apache2/sites-enabled/hosts.conf
         external_links:

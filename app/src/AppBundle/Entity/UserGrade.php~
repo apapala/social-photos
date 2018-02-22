@@ -1,0 +1,35 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * UserGrade
+ *
+ * @ORM\Table(name="user_grade")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\UserGradeRepository")
+ */
+class UserGrade
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+}
+
