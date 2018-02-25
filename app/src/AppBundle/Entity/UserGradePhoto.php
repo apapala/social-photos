@@ -5,13 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * UserTagPhoto
+ * UserGrade
  *
- * @ORM\Table(name="user_tag_photo")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\UserTagPhotoRepository")
- * @ORM\HasLifecycleCallbacks
+ * @ORM\Table(name="user_grade_photo")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\UserGradePhotoRepository")
  */
-class UserTagPhoto
+class UserGradePhoto
 {
     /**
      * @var int
@@ -29,16 +28,17 @@ class UserTagPhoto
     private $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Tag")
-     * @ORM\JoinColumn(name="tag_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="Grade")
+     * @ORM\JoinColumn(name="grade_id", referencedColumnName="id")1
      */
-    private $tag;
+    private $grade;
 
     /**
      * @ORM\ManyToOne(targetEntity="Photo")
      * @ORM\JoinColumn(name="photo_id", referencedColumnName="id")
      */
     private $photo;
+
 
     /**
      * Get id
@@ -51,19 +51,11 @@ class UserTagPhoto
     }
 
     /**
-     * @ORM\PrePersist
-     */
-    public function setCreatedAtValue()
-    {
-        $this->createdAt = new \DateTime();
-    }
-
-    /**
      * Set user
      *
      * @param \AppBundle\Entity\User $user
      *
-     * @return UserTagPhoto
+     * @return UserGradePhoto
      */
     public function setUser(\AppBundle\Entity\User $user = null)
     {
@@ -83,27 +75,27 @@ class UserTagPhoto
     }
 
     /**
-     * Set tag
+     * Set grade
      *
-     * @param \AppBundle\Entity\Tag $tag
+     * @param \AppBundle\Entity\Grade $grade
      *
-     * @return UserTagPhoto
+     * @return UserGradePhoto
      */
-    public function setTag(\AppBundle\Entity\Tag $tag = null)
+    public function setGrade(\AppBundle\Entity\Grade $grade = null)
     {
-        $this->tag = $tag;
+        $this->grade = $grade;
 
         return $this;
     }
 
     /**
-     * Get tag
+     * Get grade
      *
-     * @return \AppBundle\Entity\Tag
+     * @return \AppBundle\Entity\Grade
      */
-    public function getTag()
+    public function getGrade()
     {
-        return $this->tag;
+        return $this->grade;
     }
 
     /**
@@ -111,7 +103,7 @@ class UserTagPhoto
      *
      * @param \AppBundle\Entity\Photo $photo
      *
-     * @return UserTagPhoto
+     * @return UserGradePhoto
      */
     public function setPhoto(\AppBundle\Entity\Photo $photo = null)
     {

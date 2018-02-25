@@ -22,26 +22,43 @@ class Grade
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * @var int
+     *
+     * @ORM\Column(name="grade", type="string", length=255, unique=true))
      */
-    private $user;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Photo")
-     * @ORM\JoinColumn(name="photo_id", referencedColumnName="id")
-     */
-    private $photo;
-
+    private $grade;
 
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
     }
-}
 
+    /**
+     * Set grade
+     *
+     * @param string $grade
+     *
+     * @return Grade
+     */
+    public function setGrade($grade)
+    {
+        $this->grade = $grade;
+
+        return $this;
+    }
+
+    /**
+     * Get grade
+     *
+     * @return string
+     */
+    public function getGrade()
+    {
+        return $this->grade;
+    }
+}

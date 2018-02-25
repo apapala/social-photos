@@ -15,4 +15,15 @@ db-validate:
 db-update:
 	php bin/console doctrine:schema:update --dump-sql --force
 
+project-cache-clear:
+	# php bin/console cache:clear --env=prod
+	php bin/console cache:clear --env=dev
+	# php bin/console cache:pool:clear
+	# php bin/console doctrine:cache:clear-collection-region
+	# php bin/console doctrine:cache:clear-entity-region
+	php bin/console doctrine:cache:clear-metadata
+	php bin/console doctrine:cache:clear-query
+	# php bin/console doctrine:cache:clear-query-region
+	php bin/console doctrine:cache:clear-result
+
 .PHONY: exec-php exec-mysql

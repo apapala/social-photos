@@ -1,12 +1,10 @@
 # To get started with security, check out the documentation:
 # https://symfony.com/doc/current/security.html
+# Or here for 3.4:
+# https://symfony.com/doc/3.4/reference/configuration/security.html
 security:
 
     # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
-    providers:
-        in_memory:
-            memory: ~
-
     providers:
         in_memory:
             memory: ~
@@ -17,6 +15,10 @@ security:
                 # if you're using multiple entity managers
                 # manager_name: customer
 
+    encoders:
+        AppBundle\Entity\User:
+            algorithm: bcrypt
+
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
         dev:
@@ -25,7 +27,7 @@ security:
 
         main:
             anonymous: ~
-            # activate different ways to authenticate
+            # activate different ways to authenticate§
 
             provider: user_db_provider
 
@@ -34,11 +36,23 @@ security:
                 check_path: login # This value can also be route name
                 csrf_token_generator: security.csrf.token_manager
 
-                # always_use_default_target_path: true
-                # default_target_path: /admin
+                username_parameter: _email
+                password_parameter: _password
+
+                always_use_default_target_path: true
+                default_target_path: /
 
             logout:
                 path: /logout # logout path, route name probably tii
                 # success_handler: my_auth_handler
+
+    role_hierarchy:
+        ROLE_USER: ROLE_USER
+
+    access_control:
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/user, roles: ROLE_USER }
+        - { path: ^/, roles: ROLE_USER }
 
 

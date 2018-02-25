@@ -1,6 +1,6 @@
-<?php
+<?php namespace AppBundle\Repository;
 
-namespace AppBundle\Repository;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 /**
  * UserRepository

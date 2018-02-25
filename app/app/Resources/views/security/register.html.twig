@@ -1,0 +1,44 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+
+    Register
+
+{% endblock %}
+
+{% form_theme formRegister 'form/login.html.twig' %}
+
+{% block body %}
+
+    <div>
+        <div class="login_wrapper">
+            <div id="register" class="form">
+                <section class="login_content">
+                    <div style="position: relative; margin-top: 20px;"> {#TODO Move eventually to sass#}
+                        <h1>Create Account</h1>
+
+                        {{ form_start(formRegister) }}
+                        {{ form_widget(formRegister) }}
+                        <div>
+                            <button class="btn btn-default submit" type="submit">Submit</button>
+                        </div>
+                        {{ form_end(formRegister) }}
+
+                        <div class="clearfix"></div>
+
+                        <div class="separator">
+                            <p class="change_link">Already a member ?
+                                <a href="{{ url('login') }}" class="to_register"> Log in </a>
+                            </p>
+
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                    </form>
+                </section>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+
+    Login
+
+{% endblock %}
+
+{% form_theme formLogin 'form/login.html.twig' %}
+
+{% block body %}
+
+    <div>
+        <div class="login_wrapper">
+            <div class="form login_form">
+                <section class="login_content">
+                    <form action="{{ path('login') }}" method="post">
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                        <h1>Please login</h1>
+
+                        {% if error %}
+                            <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                        {% endif %}
+
+                        {{ form_start(formLogin) }}
+                        {{ form_widget(formLogin) }}
+                        <div>
+                            <button class="btn btn-default submit" type="submit">Submit</button>
+                        </div>
+                        {{ form_end(formLogin) }}
+
+                        <div class="clearfix"></div>
+
+                        <div class="separator">
+                            <p class="change_link">New to site?
+                                <a href="{{  url('register') }}" class="to_register"> Create Account </a>
+                            </p>
+
+                            <div class="clearfix"></div>
+
+                        </div>
+
+                    </form>
+                </section>
+            </div>
+
+        </div>
+    </div>
+
+
+{% endblock %}
