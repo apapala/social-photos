@@ -10,4 +10,5 @@ namespace AppBundle\Repository;
  */
 class UserTagPhotoRepository extends \Doctrine\ORM\EntityRepository
 {
+
 }

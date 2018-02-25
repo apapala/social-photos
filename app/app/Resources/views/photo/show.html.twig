@@ -1,24 +1,59 @@
-{% extends 'base.html.twig' %}
+{% extends 'base-admin.html.twig' %}
+
+{% block title %}
+
+    Photo - view
+
+{% endblock %}
+
+{% form_theme userGradePhotoForm 'form/admin.html.twig' %}
 
 {% block body %}
-    <h1>Photo</h1>
 
-    <table>
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ photo.id }}</td>
-            </tr>
-            <tr>
-                <th>Filename</th>
-                <td>{{ photo.filename }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="right_col" role="main">
+        <div class="">
+            <div class="page-title">
+                <div class="title_left">
+                    <h1>Photos</h1>
+                </div>
+            </div>
+            <div class="clearfix"></div>
 
-    <ul>
-        <li>
-            <a href="{{ path('photo_index') }}">Back to the list</a>
-        </li>
-    </ul>
+            <div class="row">
+
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2>View photo</h2>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="x_content">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    {% if userGradePhoto is null %}
+                                        {{  form_start(userGradePhotoForm) }}
+                                        {{  form_widget(userGradePhotoForm) }}
+                                        <div>
+                                            <button class="btn btn-default submit" type="submit">Submit</button>
+                                        </div>
+                                        {{  form_end(userGradePhotoForm) }}
+
+                                        {% else %}
+
+                                        You have already rated this photo with: {{ userGradePhoto.grade.grade }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
 {% endblock %}

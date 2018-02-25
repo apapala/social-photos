@@ -84,6 +84,7 @@ class RegistrationController extends Controller
         return $this->render('security/register.html.twig', array(
             'formRegister' => $form->createView()
         ));
+
     }
 
     /**

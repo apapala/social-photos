@@ -24,7 +24,7 @@ class Grade
     /**
      * @var int
      *
-     * @ORM\Column(name="grade", type="string", length=255, unique=true))
+     * @ORM\Column(name="grade", type="integer", unique=true))
      */
     private $grade;
 

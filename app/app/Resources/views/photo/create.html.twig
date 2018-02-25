@@ -1,0 +1,82 @@
+{% extends 'base-admin.html.twig' %}
+
+{% block title %}
+
+    Register
+
+{% endblock %}
+
+{% form_theme form 'form/admin.html.twig' %}
+
+{% block css %}
+
+    <link href="/gentelella/vendors/jquery.tagsinput/src/jquery.tagsinput.css" rel="stylesheet">
+
+{% endblock %}
+
+
+
+{% block javascripts %}
+
+    <!-- jQuery Tags Input -->
+    <script src="/gentelella/vendors/jquery.tagsinput/src/jquery.tagsinput.js"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function(){
+
+            $("#photo_tags").tagsInput({
+                width: "auto",
+            });
+
+        });
+
+
+    </script>
+
+
+{% endblock %}
+
+{% block body %}
+
+    <div class="right_col" role="main">
+        <div class="">
+            <div class="page-title">
+                <div class="title_left">
+                    <h1>Photos</h1>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+
+            <div class="row">
+
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2>Create new photo{#<small>Users</small>#}</h2>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="x_content">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    {{  form_start(form) }}
+                                    {{  form_widget(form) }}
+                                    <div>
+                                        <button class="btn btn-default submit" type="submit">Submit</button>
+                                    </div>
+                                    {{  form_end(form) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

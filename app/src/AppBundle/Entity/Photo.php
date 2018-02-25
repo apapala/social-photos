@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -28,6 +29,22 @@ class Photo
      */
     private $filename;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="Tag", cascade={"persist"})
+     */
+    protected $userTagPhotos;
+
+    /**
+     * One photo has one user
+     * @ORM\OneToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     */
+    private $creator;
+
+    public function __construct()
+    {
+        $this->userTagPhotos = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -61,5 +78,26 @@ class Photo
     public function getFilename()
     {
         return $this->filename;
+    }
+
+    public function getUserTagPhotos()
+    {
+        return $this->userTagPhotos;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCreator()
+    {
+        return $this->creator;
+    }
+
+    /**
+     * @param mixed $creator
+     */
+    public function setCreator($creator)
+    {
+        $this->creator = $creator;
     }
 }

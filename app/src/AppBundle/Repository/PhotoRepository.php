@@ -2,6 +2,11 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Entity\Photo;
+use AppBundle\Entity\Tag;
+use AppBundle\Entity\User;
+use AppBundle\Entity\UserTagPhoto;
+
 /**
  * PhotoRepository
  *
@@ -10,4 +15,22 @@ namespace AppBundle\Repository;
  */
 class PhotoRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function addTagsToPhoto($tagsArray, Photo $photo, User $user)
+    {
+        $em = $this->getEntityManager();
+
+        $tagRepository = $this->getEntityManager()->getRepository(Tag::class);
+
+        foreach ($tagsArray as $tagName) {
+            $tag = $tagRepository->createTag($tagName);
+
+            $userTagPhoto = new UserTagPhoto();
+            $userTagPhoto->setPhoto($photo);
+            $userTagPhoto->setUser($user);
+            $userTagPhoto->setTag($tag);
+            $em->persist($userTagPhoto);
+
+        }
+    }
+
 }

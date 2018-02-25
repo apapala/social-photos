@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -55,6 +56,29 @@ class User implements AdvancedUserInterface
      * @var
      */
     public $plainPassword; // This must be set here
+
+
+    /**
+     * Many Users have Many Users.
+     * @ORM\ManyToMany(targetEntity="User", mappedBy="myFriends")
+     */
+    private $friendsWithMe;
+
+    /**
+     * Many Users have many Users.
+     * @ORM\ManyToMany(targetEntity="User", inversedBy="friendsWithMe")
+     * @ORM\JoinTable(name="user_friend",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="friend_id", referencedColumnName="id")}
+     *      )
+     */
+    private $myFriends;
+
+    public function __construct()
+    {
+        $this->friendsWithMe = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->myFriends = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -261,4 +285,64 @@ class User implements AdvancedUserInterface
      * the plain-text password is stored on this object.
      */
     public function eraseCredentials() {}
+
+    /**
+     * @return mixed
+     */
+    public function getMyFriends()
+    {
+        return $this->myFriends;
+    }
+
+    /**
+     * @param mixed $myFriends
+     */
+    public function setMyFriends($myFriends): void
+    {
+        $this->myFriends = $myFriends;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFriendsWithMe()
+    {
+        return $this->friendsWithMe;
+    }
+
+    /**
+     * @param mixed $friendsWithMe
+     */
+    public function setFriendsWithMe($friendsWithMe): void
+    {
+        $this->friendsWithMe = $friendsWithMe;
+    }
+
+    /**
+     * This is to add a new my friend
+     * @param User $user
+     * @return User
+     */
+    public function addMyFriend(User $user)
+    {
+        if (!$this->myFriends->contains($user)) {
+            $this->myFriends->add($user);
+        }
+
+        return $this;
+    }
+
+    /**
+     * This is to remove my friend
+     * @param User $user
+     * @return User
+     */
+    public function removeMyFriend(User $user)
+    {
+        if ($this->myFriends->contains($user)) {
+            $this->myFriends->removeElement($user);
+        }
+
+        return $this;
+    }
 }

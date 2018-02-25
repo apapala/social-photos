@@ -1,6 +1,8 @@
 <?php
 
 namespace AppBundle\Repository;
+use AppBundle\Entity\Photo;
+use AppBundle\Entity\User;
 
 /**
  * UserGradePhotoRepository
@@ -10,4 +12,9 @@ namespace AppBundle\Repository;
  */
 class UserGradePhotoRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function findOneByPhotoAndUser(Photo $photo, User $user)
+    {
+        return $this->findOneBy(['photo' => $photo, 'user' => $user]);
+    }
+
 }

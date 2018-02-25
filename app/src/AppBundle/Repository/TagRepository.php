@@ -1,6 +1,7 @@
 <?php
 
 namespace AppBundle\Repository;
+use AppBundle\Entity\Tag;
 
 /**
  * TagRepository
@@ -10,4 +11,30 @@ namespace AppBundle\Repository;
  */
 class TagRepository extends \Doctrine\ORM\EntityRepository
 {
+
+    /**
+     * Creates new tag and returns tag,
+     * if tag exists method will return that tag
+     *
+     * @param $tagName
+     * @return Tag|null|object
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function createTag($tagName) : Tag
+    {
+        $tag = $this->findOneBy(['name' => $tagName]);
+
+        if (!$tag) {
+            $tag = new Tag();
+            $tag->setName($tagName);
+
+            $em = $this->getEntityManager();
+            $em->persist($tag);
+            $em->flush();
+
+            return $tag;
+        }
+
+        return $tag;
+    }
 }

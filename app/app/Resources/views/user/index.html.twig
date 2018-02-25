@@ -37,7 +37,7 @@
         <div class="">
             <div class="page-title">
                 <div class="title_left">
-                    <h1>Users list</h1>
+                    <h1>Users</h1>
                 </div>
             </div>
             <div class="clearfix"></div>
@@ -74,7 +74,24 @@
                                                 <td>{{ user.id }}</td>
                                                 <td>{{ user.firstName }}</td>
                                                 <td>{{ user.email }}</td>
-                                                <td></td>
+                                                <td class="text-center">
+
+                                                    <a href="{{ path('user_show', {'id' : user.id}) }}" type="button" class="btn btn-primary btn-xs">Show</a>
+
+                                                    {% if app.user.id == user.id %}
+
+                                                    {% else %}
+                                                        {% if user in app.user.myFriends %}
+                                                            <a href="{{ path('user_remove_friend', {'id' : user.id}) }}" type="button" class="btn btn-danger btn-xs">Remove friend</a>
+                                                        {% else %}
+                                                            <a href="{{ path('user_make_friend', {'id' : user.id}) }}" type="button" class="btn btn-primary btn-xs">Make friend</a>
+                                                        {% endif %}
+
+                                                    {% endif %}
+
+
+
+                                                </td>
                                             </tr>
                                             {% endfor %}
                                             </tbody>
@@ -94,3 +111,4 @@
     </div>
     
 {% endblock %}
+
