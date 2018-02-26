@@ -40,8 +40,11 @@ docker ps
 Run migration and fixtures
 
 ```
-TODO
+cd app
+make db-update
+php bin/console doctrine:fixtures:load --append
 ```
+Create account. Login. Enjoy.
 
 ## Access other serviecs
 
