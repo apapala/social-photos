@@ -29,7 +29,7 @@
                         </div>
                         <div class="x_content">
                             <div class="row">
-                                <div class="col-sm-12">
+                                <div class="col-sm-3">
                                     {% if userGradePhoto is null %}
                                         {{  form_start(userGradePhotoForm) }}
                                         {{  form_widget(userGradePhotoForm) }}
@@ -37,20 +37,22 @@
                                             <button class="btn btn-default submit" type="submit">Submit</button>
                                         </div>
                                         {{  form_end(userGradePhotoForm) }}
-
                                         {% else %}
-
-                                        You have already rated this photo with: {{ userGradePhoto.grade.grade }}
+                                            <p>You have already rated this photo with: {{ userGradePhoto.grade.grade }}</p>
+                                    {% endif %}
+                                </div>
+                                <div class="col-sm-9">
+                                    {% if averageGrade %}
+                                        <p>Current rating average: {{ averageGrade }}</p>
+                                        <p>Number of ratings: {{ numberOfGradesOfPhoto }}</p>
+                                        {% else %}
+                                            <p>At least one rating is required to display score</p>
                                     {% endif %}
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-
-
-
             </div>
         </div>
     </div>

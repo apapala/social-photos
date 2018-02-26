@@ -35,8 +35,8 @@ class Photo
     protected $userTagPhotos;
 
     /**
-     * One photo has one user
-     * @ORM\OneToOne(targetEntity="User")
+     * Many Features have One Product.
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="photo")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     private $creator;

@@ -2,6 +2,8 @@
 
 namespace AppBundle\Repository;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 /**
  * UserTagPhotoRepository
  *
@@ -11,4 +13,30 @@ namespace AppBundle\Repository;
 class UserTagPhotoRepository extends \Doctrine\ORM\EntityRepository
 {
 
+    public function findAllTagsByUsers($userIds)
+    {
+        // More on query builder: http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/query-builder.html
+
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+        $qb
+            ->select('t.name')
+            ->from('AppBundle:UserTagPhoto', 'utp')
+            ->leftJoin('utp.tag', 't')
+            ->andWhere('utp.user IN (:ids)')
+            ->setParameter('ids', $userIds);
+
+        $result = $qb->getQuery()->getResult();
+
+        $tags = [];
+        foreach ($result as $userTagPhoto) {
+            $tags[] = $userTagPhoto['name'];
+        }
+
+        $tagOccurences = array_count_values($tags);
+
+        arsort($tagOccurences);
+
+        return $tagOccurences;
+    }
 }

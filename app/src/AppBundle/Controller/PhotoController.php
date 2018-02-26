@@ -125,12 +125,17 @@ class PhotoController extends Controller
             'method' => 'POST',
         ]);
 
+        $averageGrade = $userGradePhotoRepository->getAverageGradeOfPhoto($photo);
+        $numberOfGradesOfPhoto = $userGradePhotoRepository->getNumberOfGradesOfPhoto($photo);
+
         $userGradePhoto = $userGradePhotoRepository->findOneByPhotoAndUser($photo, $this->getUser());
 
         return $this->render('photo/show.html.twig', array(
             'photo' => $photo,
             'userGradePhotoForm' => $userGradePhotoForm->createView(),
-            'userGradePhoto' => $userGradePhoto
+            'userGradePhoto' => $userGradePhoto,
+            'averageGrade' => $averageGrade,
+            'numberOfGradesOfPhoto' => $numberOfGradesOfPhoto
         ));
     }
 

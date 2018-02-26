@@ -74,10 +74,17 @@ class User implements AdvancedUserInterface
      */
     private $myFriends;
 
+    /**
+     * One Product has Many Features.
+     * @ORM\OneToMany(targetEntity="Photo", mappedBy="user")
+     */
+    private $photos;
+
     public function __construct()
     {
-        $this->friendsWithMe = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->myFriends = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->friendsWithMe = new ArrayCollection();
+        $this->myFriends = new ArrayCollection();
+        $this->photos = new ArrayCollection();
     }
 
     /**
@@ -297,7 +304,7 @@ class User implements AdvancedUserInterface
     /**
      * @param mixed $myFriends
      */
-    public function setMyFriends($myFriends): void
+    public function setMyFriends($myFriends)
     {
         $this->myFriends = $myFriends;
     }
@@ -313,7 +320,7 @@ class User implements AdvancedUserInterface
     /**
      * @param mixed $friendsWithMe
      */
-    public function setFriendsWithMe($friendsWithMe): void
+    public function setFriendsWithMe($friendsWithMe)
     {
         $this->friendsWithMe = $friendsWithMe;
     }
@@ -344,5 +351,21 @@ class User implements AdvancedUserInterface
         }
 
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPhotos()
+    {
+        return $this->photos;
+    }
+
+    /**
+     * @param mixed $photos
+     */
+    public function setPhotos($photos)
+    {
+        $this->photos = $photos;
     }
 }

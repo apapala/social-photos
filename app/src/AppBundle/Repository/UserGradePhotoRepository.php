@@ -17,4 +17,40 @@ class UserGradePhotoRepository extends \Doctrine\ORM\EntityRepository
         return $this->findOneBy(['photo' => $photo, 'user' => $user]);
     }
 
+    public function findAllByPhoto(Photo $photo)
+    {
+        return $this->findBy(['photo' => $photo]);
+    }
+
+    public function getNumberOfGradesOfPhoto(Photo $photo)
+    {
+        $userPhotoGrades = $this->findAllByPhoto($photo);
+
+        $count = 0;
+
+        foreach ($userPhotoGrades as $userPhotoGrade) {
+            $count++;
+        }
+
+        return $count;
+    }
+
+    public function getAverageGradeOfPhoto(Photo $photo)
+    {
+        $userPhotoGrades = $this->findAllByPhoto($photo);
+
+        $sum = 0;
+        $count = 0;
+
+        foreach ($userPhotoGrades as $userPhotoGrade) {
+            $sum = $userPhotoGrade->getGrade()->getGrade() + $sum;
+            $count++;
+        }
+
+        if ($count !== 0) {
+            return $average = $sum / $count;
+        } else {
+            return false;
+        }
+    }
 }

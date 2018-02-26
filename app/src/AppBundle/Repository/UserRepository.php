@@ -1,5 +1,6 @@
 <?php namespace AppBundle\Repository;
 
+use AppBundle\Entity\User;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 /**
@@ -10,4 +11,15 @@ use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
  */
 class UserRepository extends \Doctrine\ORM\EntityRepository
 {
+
+    public function getFriendsIdsOfUser(User $user)
+    {
+        $array = [];
+
+        foreach ($user->getMyFriends() as $friend) {
+            $array[] = $friend->getId();
+        }
+
+        return $array;
+    }
 }
