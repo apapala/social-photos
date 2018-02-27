@@ -30,9 +30,16 @@ class Photo
     private $filename;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Tag", cascade={"persist"})
+     * One photo has many userTagPhoto.
+     * @ORM\OneToMany(targetEntity="UserTagPhoto", mappedBy="photo")
      */
     protected $userTagPhotos;
+
+    /**
+     * One Photo has many userGradePhoto.
+     * @ORM\OneToMany(targetEntity="UserGradePhoto", mappedBy="photo")
+     */
+    protected $userGradePhotos;
 
     /**
      * Many Features have One Product.
@@ -44,6 +51,7 @@ class Photo
     public function __construct()
     {
         $this->userTagPhotos = new ArrayCollection();
+        $this->userGradePhotos = new ArrayCollection();
     }
 
     /**
@@ -99,5 +107,13 @@ class Photo
     public function setCreator($creator)
     {
         $this->creator = $creator;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserGradePhotos()
+    {
+        return $this->userGradePhotos;
     }
 }

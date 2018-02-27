@@ -65,6 +65,18 @@ class User implements AdvancedUserInterface
     private $friendsWithMe;
 
     /**
+     * One user has many userTagPhoto.
+     * @ORM\OneToMany(targetEntity="UserTagPhoto", mappedBy="user")
+     */
+    protected $userTagPhotos;
+
+    /**
+     * One user has many userGradePhoto.
+     * @ORM\OneToMany(targetEntity="UserGradePhoto", mappedBy="user")
+     */
+    protected $userGradePhotos;
+
+    /**
      * Many Users have many Users.
      * @ORM\ManyToMany(targetEntity="User", inversedBy="friendsWithMe")
      * @ORM\JoinTable(name="user_friend",
@@ -85,6 +97,8 @@ class User implements AdvancedUserInterface
         $this->friendsWithMe = new ArrayCollection();
         $this->myFriends = new ArrayCollection();
         $this->photos = new ArrayCollection();
+        $this->userGradePhotos = new ArrayCollection();
+        $this->userTagPhotos = new ArrayCollection();
     }
 
     /**
@@ -367,5 +381,21 @@ class User implements AdvancedUserInterface
     public function setPhotos($photos)
     {
         $this->photos = $photos;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserTagPhotos()
+    {
+        return $this->userTagPhotos;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserGradePhotos()
+    {
+        return $this->userGradePhotos;
     }
 }

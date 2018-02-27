@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -27,6 +28,17 @@ class Grade
      * @ORM\Column(name="grade", type="integer", unique=true))
      */
     private $grade;
+
+    /**
+     * One grade has many userGradePhoto.
+     * @ORM\OneToMany(targetEntity="UserGradePhoto", mappedBy="grade")
+     */
+    protected $userGradePhotos;
+
+    public function __construct()
+    {
+        $this->userGradePhotos = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -60,5 +72,13 @@ class Grade
     public function getGrade()
     {
         return $this->grade;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserGradePhotos()
+    {
+        return $this->userGradePhotos;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -28,6 +29,16 @@ class Tag
      */
     private $name;
 
+    /**
+     * One tag has many userTagPhoto.
+     * @ORM\OneToMany(targetEntity="UserTagPhoto", mappedBy="tag")
+     */
+    protected $userTagPhotos;
+
+    public function __construct()
+    {
+        $this->userTagPhotos = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -61,5 +72,13 @@ class Tag
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserTagPhotos()
+    {
+        return $this->userTagPhotos;
     }
 }
