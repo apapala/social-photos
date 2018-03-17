@@ -25,15 +25,29 @@ class Photo
     /**
      * @var string
      *
-     * @ORM\Column(name="filename", type="string", length=255, unique=true)
+     * @ORM\Column(name="filename", type="string", length=255, unique=false, nullable=true)
      */
-    private $filename;
+    private $filename = null;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="image", type="string", length=255, unique=false, nullable=true)
+     */
+    private $image;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="thumbnail", type="string", length=255, unique=false, nullable=true)
+     */
+    private $thumbnail;
 
     /**
      * One photo has many userTagPhoto.
      * @ORM\OneToMany(targetEntity="UserTagPhoto", mappedBy="photo")
      */
-    protected $userTagPhotos;
+    private $userTagPhotos;
 
     /**
      * One Photo has many userGradePhoto.
@@ -93,6 +107,11 @@ class Photo
         return $this->userTagPhotos;
     }
 
+    public function setUserTagPhotos($userTagPhotos)
+    {
+        $this->userTagPhotos = $userTagPhotos;
+    }
+
     /**
      * @return mixed
      */
@@ -115,5 +134,41 @@ class Photo
     public function getUserGradePhotos()
     {
         return $this->userGradePhotos;
+    }
+
+    /**
+     * @param string $image
+     * @return Photo
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
+     * @param string $thumbnail
+     * @return Photo
+     */
+    public function setThumbnail($thumbnail)
+    {
+        $this->thumbnail = $thumbnail;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getThumbnail()
+    {
+        return $this->thumbnail;
     }
 }

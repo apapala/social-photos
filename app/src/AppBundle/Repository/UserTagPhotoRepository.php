@@ -2,7 +2,10 @@
 
 namespace AppBundle\Repository;
 
-use Doctrine\Common\Collections\ArrayCollection;
+use AppBundle\Entity\Photo;
+use AppBundle\Entity\Tag;
+use AppBundle\Entity\User;
+use AppBundle\Entity\UserTagPhoto;
 
 /**
  * UserTagPhotoRepository
@@ -39,4 +42,37 @@ class UserTagPhotoRepository extends \Doctrine\ORM\EntityRepository
 
         return $tagOccurences;
     }
+
+    public function removeTagsOnPhoto(Photo $photo, User $user)
+    {
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+        $qb
+            ->delete('AppBundle:UserTagPhoto', 'utp')
+            ->where('utp.user = :user')
+            ->andWhere('utp.photo = :photo')
+            ->setParameter('user', $user)
+            ->setParameter('photo', $photo);
+
+        $qb->getQuery()->getResult();
+    }
+
+    public function addTagsToPhoto($tagsArray, Photo $photo, User $user)
+    {
+        $em = $this->getEntityManager();
+
+        $tagRepository = $this->getEntityManager()->getRepository(Tag::class);
+
+        foreach ($tagsArray as $tagName) {
+            $tag = $tagRepository->createTag($tagName);
+
+            $userTagPhoto = new UserTagPhoto();
+            $userTagPhoto->setPhoto($photo);
+            $userTagPhoto->setUser($user);
+            $userTagPhoto->setTag($tag);
+            $em->persist($userTagPhoto);
+
+        }
+    }
+
 }

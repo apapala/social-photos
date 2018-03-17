@@ -4,12 +4,12 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Grade;
 use AppBundle\Entity\Photo;
-use AppBundle\Entity\Tag;
 use AppBundle\Entity\UserGradePhoto;
 use AppBundle\Entity\UserTagPhoto;
 use AppBundle\Form\PhotoType;
 use AppBundle\Form\UserGradePhotoType;
-use AppBundle\Service\FileUploader;
+use AppBundle\Service\FileManager;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -40,15 +40,16 @@ class PhotoController extends Controller
     }
 
 
-
-
     /**
      * Finds and displays a photo entity.
      *
      * @Route("/create", name="photo_create")
      * @Method({"GET", "POST"})
+     * @param Request $request
+     * @param FileManager $fileManager
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function createAction(Request $request, FileUploader $fileUploader)
+    public function createAction(Request $request, FileManager $fileManager)
     {
         $photo = new Photo();
 
@@ -63,13 +64,14 @@ class PhotoController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            // Check if $request has new file
-            if ($request->files->get('photo')['filename']) {
-                $file = $fileUploader->upload($photo->getFilename(), $this->getParameter('photos_directory'));
-                $photo->setFilename($file);
-            } else {
-                $photo->setFilename('');
-            }
+            $fileManager
+                ->setFormFields(['filename', 'image', 'thumbnail'])
+                ->setPath($this->getParameter('photos_directory'))
+                ->setBlockPrefix('photo');
+
+            $photo = $fileManager->uploadRequestFile($request, $photo);
+
+            $photo->setUserTagPhotos(new ArrayCollection()); // Because form type is mapped and tags handled by repository?
 
             // Set creator of this photo
             $photo->setCreator($this->getUser());
@@ -77,16 +79,16 @@ class PhotoController extends Controller
             $em->persist($photo);
 
             // Save tags
-            if (!empty($form->get('tags')->getData())) {
+            if (!empty($form->get('userTagPhotos')->getData())) {
 
-                $photoRepository = $this->getDoctrine()->getRepository(Photo::class);
-                $photoRepository->addTagsToPhoto(explode(',', $form->get('tags')->getData()), $photo, $this->getUser());
+                $userTagPhotoRepository = $this->getDoctrine()->getRepository(UserTagPhoto::class);
+                $userTagPhotoRepository->addTagsToPhoto(explode(',', $form->get('userTagPhotos')->getData()), $photo, $this->getUser());
 
             }
 
             $em->flush();
 
-            return $this->redirectToRoute('photo_index');
+            return $this->redirectToRoute('photo_edit', ['photo' => $photo->getId()]);
 
 //            // More redirection options
 //
@@ -106,6 +108,86 @@ class PhotoController extends Controller
 
         return $this->render('photo/create.html.twig', array(
             'form' => $form->createView(),
+        ));
+    }
+
+    /**
+     * Finds and displays a photo entity.
+     *
+     * @Route("/{photo}/edit", name="photo_edit")
+     * @Method({"GET", "POST"})
+     * @param Request $request
+     * @param FileManager $fileManager
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
+    public function editAction(Photo $photo, Request $request, FileManager $fileManager)
+    {
+        // $originalFilename = $photo->getFilename();
+
+        $form = $this->createForm(PhotoType::class, $photo, [
+            'action' => $this->generateUrl('photo_edit', ['photo' => $photo->getId()]),
+            'method' => 'POST',
+            'validation_groups' => 'edit'
+        ]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $em = $this->getDoctrine()->getManager();
+
+            $fileManager
+                ->setFormFields(['filename'])
+                ->setPath($this->getParameter('photos_directory'))
+                ->setBlockPrefix('photo');
+
+            $photo = $fileManager->uploadRequestFile($request, $photo);
+
+            $fileManager->setFormFields(['image', 'thumbnail']);
+
+            $photo = $fileManager->uploadRequestFile($request, $photo);
+
+            $photo->setUserTagPhotos(new ArrayCollection()); // Because form type is mapped and tags handled by repository?
+
+            // Set creator of this photo
+            $photo->setCreator($this->getUser());
+
+            $em->persist($photo);
+
+            // Save tags
+            if (!empty($form->get('userTagPhotos')->getData())) {
+
+                $userTagPhotoRepository = $this->getDoctrine()->getRepository(UserTagPhoto::class);
+                $userTagPhotoRepository->removeTagsOnPhoto($photo, $this->getUser());
+                $userTagPhotoRepository->addTagsToPhoto(explode(',', $form->get('userTagPhotos')->getData()), $photo, $this->getUser());
+
+            }
+
+            $em->flush();
+
+            return $this->redirectToRoute('photo_edit', ['photo' => $photo->getId()]);
+
+//            // More redirection options
+//
+//            // redirect to the "homepage" route
+//            return $this->redirectToRoute('homepage');
+//
+//            // do a permanent - 301 redirect
+//            return $this->redirectToRoute('homepage', array(), 301);
+//
+//            // redirect to a route with parameters
+//            return $this->redirectToRoute('blog_show', array('slug' => 'my-page'));
+//
+//            // redirect externally
+//            return $this->redirect('http://symfony.com/doc');
+
+        }
+
+        // $photo->setFilename($photo->getFilename());
+
+        return $this->render('photo/edit.html.twig', array(
+            'form' => $form->createView(),
+            'photo' => $photo
         ));
     }
 

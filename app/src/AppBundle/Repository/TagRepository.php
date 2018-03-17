@@ -30,7 +30,6 @@ class TagRepository extends \Doctrine\ORM\EntityRepository
 
             $em = $this->getEntityManager();
             $em->persist($tag);
-            $em->flush();
 
             return $tag;
         }

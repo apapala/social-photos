@@ -26,4 +26,4 @@ project-cache-clear:
 	# php bin/console doctrine:cache:clear-query-region
 	php bin/console doctrine:cache:clear-result
 
-.PHONY: exec-php exec-mysql
+.PHONY: build exec-php exec-mysql db-update db-validate project-cache-clear
