@@ -8,12 +8,14 @@ use AppBundle\Entity\UserGradePhoto;
 use AppBundle\Entity\UserTagPhoto;
 use AppBundle\Form\PhotoType;
 use AppBundle\Form\UserGradePhotoType;
+use AppBundle\Service\AccessManager;
 use AppBundle\Service\FileManager;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Photo controller.
@@ -22,6 +24,20 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class PhotoController extends Controller
 {
+    /**
+     * @var AccessManager
+     */
+    private $accessManager;
+
+    /**
+     * PhotoController constructor.
+     * @param AccessManager $accessManager
+     */
+    public function __construct(AccessManager $accessManager)
+    {
+        $this->accessManager = $accessManager;
+    }
+
     /**
      * Lists all photo entities.
      *
@@ -38,7 +54,6 @@ class PhotoController extends Controller
             'photos' => $photos,
         ));
     }
-
 
     /**
      * Finds and displays a photo entity.
@@ -85,8 +100,10 @@ class PhotoController extends Controller
                 $userTagPhotoRepository->addTagsToPhoto(explode(',', $form->get('userTagPhotos')->getData()), $photo, $this->getUser());
 
             }
-
+            
             $em->flush();
+
+            $this->accessManager->setAsOwner($photo);
 
             return $this->redirectToRoute('photo_edit', ['photo' => $photo->getId()]);
 
@@ -122,7 +139,9 @@ class PhotoController extends Controller
      */
     public function editAction(Photo $photo, Request $request, FileManager $fileManager)
     {
-        // $originalFilename = $photo->getFilename();
+        if ($this->isGranted('EDIT', $photo) == false) {
+            return $this->redirectToRoute('photo_index');
+        }
 
         $form = $this->createForm(PhotoType::class, $photo, [
             'action' => $this->generateUrl('photo_edit', ['photo' => $photo->getId()]),

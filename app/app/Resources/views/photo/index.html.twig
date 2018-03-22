@@ -66,7 +66,9 @@
                                             <thead>
                                             <tr>
                                                 <th>ID</th>
-                                                <th>Name</th>
+                                                <th>Filename</th>
+                                                <th>Image</th>
+                                                <th></th>
                                                 <th>Actions</th>
                                             </tr>
                                             </thead>
@@ -76,8 +78,15 @@
                                                 <tr>
                                                     <td>{{ photo.id }}</td>
                                                     <td>{{ photo.filename }}</td>
-                                                    <td class="text-center">
+                                                    <td>{{ photo.image }}</td>
+                                                    <td>{{ photo.thumbnail }}</td>
+                                                    <td class="text-center" width="10%">
+                                                        <div></div>
+
                                                         <a href="{{ path('photo_show', {'photo' : photo.id}) }}" type="button" class="btn btn-primary btn-xs">Show</a>
+                                                        {% if is_granted('OWNER', photo) %}
+                                                            <a href="{{ path('photo_edit', {'photo' : photo.id}) }}" type="button" class="btn btn-primary btn-xs">Edit</a>
+                                                        {% endif %}
                                                     </td>
                                                 </tr>
                                             {% endfor %}

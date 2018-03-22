@@ -4,6 +4,9 @@
 # https://symfony.com/doc/3.4/reference/configuration/security.html
 security:
 
+    acl:
+        connection: default
+
     # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
     providers:
         in_memory:
@@ -56,5 +59,7 @@ security:
         - { path: ^/photo/create, roles: ROLE_USER }
         - { path: ^/photo, roles: ROLE_USER }
         - { path: ^/, roles: ROLE_USER }
+
+
 
 

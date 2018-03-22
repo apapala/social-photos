@@ -41,4 +41,7 @@ services:
         arguments:
             - "@doctrine.orm.entity_manager"
 
-
+    AppBundle\Service\AccessManager:
+        class: AppBundle\Service\AccessManager
+        arguments:
+            - "@service_container"
