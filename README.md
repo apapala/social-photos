@@ -6,10 +6,31 @@ Simple Symfony 3.4 application.
 
 Clone repository
 
+Run docker compose
+```
+docker-compose up -d
+```
+Sometimes at first runs I need to run this twice
 
-Use composer to download dependencies
+Add url to hosts file
+```
+social-photos.local
+```
+
+Determine if all containers are running
+```
+docker ps
+```
+
+Exec into php container
+
 ```
 cd app
+make exec-php
+```
+
+Install dependencies
+```
 composer install
 ```
 
@@ -22,32 +43,15 @@ database_user: root
 database_password: root
 ```
 
-Run docker compose
+Create DB schema and populate with fixtures
 ```
-docker-compose up -d
-```
-
-Add url to hosts file
-```
-social-photos.local
-```
-
-Determine if all containers are running
-```
-docker ps
-```
-
-Run migration and fixtures
-
-```
-cd app
 make db-update
 php bin/console doctrine:fixtures:load --append
 ```
-Create account. Login. Enjoy.
+
+Visit social-photos.local. Create account. Login. Enjoy.
 
 ## Access other serviecs
-
 
 #### Mailcatcher 
 Available at 1080 port 
