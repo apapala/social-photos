@@ -218,6 +218,11 @@ class PhotoController extends Controller
      */
     public function showAction(Photo $photo)
     {
+        // Check if logged in user is friend with creator of $photo
+        if ($this->isGranted('friend', $photo) == false) {
+            return $this->redirectToRoute('photo_index');
+        }
+
         $userGradePhotoRepository = $this->getDoctrine()->getRepository(UserGradePhoto::class);
 
         $userGradePhoto = new UserGradePhoto();
