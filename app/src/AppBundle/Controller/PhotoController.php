@@ -220,6 +220,9 @@ class PhotoController extends Controller
     {
         // Check if logged in user is friend with creator of $photo
         if ($this->isGranted('friend', $photo) == false) {
+
+            $this->addFlash('notice', "You need to be a friend");
+
             return $this->redirectToRoute('photo_index');
         }
 
