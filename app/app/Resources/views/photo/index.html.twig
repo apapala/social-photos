@@ -66,6 +66,7 @@
                                             <thead>
                                             <tr>
                                                 <th>ID</th>
+                                                <th>Creator</th>
                                                 <th>Filename</th>
                                                 <th>Image</th>
                                                 <th></th>
@@ -77,6 +78,7 @@
                                             {% for photo in photos %}
                                                 <tr>
                                                     <td>{{ photo.id }}</td>
+                                                    <td>{{ photo.creator.getFirstName }} ({{ photo.creator.getId }})</td>
                                                     <td>{{ photo.filename }}</td>
                                                     <td>{{ photo.image }}</td>
                                                     <td>{{ photo.thumbnail }}</td>

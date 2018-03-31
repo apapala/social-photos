@@ -48,7 +48,7 @@ class PhotoController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $photos = $em->getRepository('AppBundle:Photo')->findAll();
+        $photos = $em->getRepository('AppBundle:Photo')->findAllWhereFriend($this->getUser());
 
         return $this->render('photo/index.html.twig', array(
             'photos' => $photos,
@@ -219,7 +219,7 @@ class PhotoController extends Controller
     public function showAction(Photo $photo)
     {
         // Check if logged in user is friend with creator of $photo
-        if ($this->isGranted('friend', $photo) == false) {
+        if ($this->isGranted('FRIEND', $photo) == false) {
 
             $this->addFlash('notice', "You need to be a friend");
 

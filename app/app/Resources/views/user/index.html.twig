@@ -81,10 +81,27 @@
                                                     {% if app.user.id == user.id %}
 
                                                     {% else %}
-                                                        {% if user in app.user.myFriends %}
+                                                        {% if user in app.user.myFriends and app.user in user.myFriends %}
+                                                            {#true friends#}
+
+                                                            <a href="#" type="button" class="btn btn-success btn-xs">Friends</a>
+
                                                             <a href="{{ path('user_remove_friend', {'id' : user.id}) }}" type="button" class="btn btn-danger btn-xs">Remove friend</a>
+
+                                                        {% elseif user in app.user.myFriends %}
+                                                             {#only in myFriends#}
+                                                            <a href="{{ path('user_remove_friend', {'id' : user.id}) }}" type="button" class="btn btn-danger btn-xs">Cancel friend request</a>
+
+                                                        {% elseif app.user in user.myFriends %}
+                                                            {#confirm friend request#}
+
+                                                            <a href="{{ path('user_make_friend', {'id' : user.id}) }}" type="button" class="btn btn-primary btn-xs">Accept friend request</a>
+
                                                         {% else %}
-                                                            <a href="{{ path('user_make_friend', {'id' : user.id}) }}" type="button" class="btn btn-primary btn-xs">Make friend</a>
+
+
+                                                            <a href="{{ path('user_make_friend', {'id' : user.id}) }}" type="button" class="btn btn-primary btn-xs">Send friend request</a>
+
                                                         {% endif %}
 
                                                     {% endif %}

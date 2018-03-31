@@ -398,4 +398,42 @@ class User implements AdvancedUserInterface
     {
         return $this->userGradePhotos;
     }
+
+    public function getMyFriendsIds()
+    {
+        $ids = [];
+
+        foreach ($this->getMyFriends() as $myFriend) {
+            array_push($ids, $myFriend->getId());
+        }
+
+        return $ids;
+    }
+
+    public function getFriendsWIthMeIds()
+    {
+        $ids = [];
+
+        foreach ($this->getFriendsWithMe() as $friendWithMe) {
+            array_push($ids, $friendWithMe->getId());
+        }
+
+        return $ids;
+    }
+
+    public function getConfirmedFriendsIds()
+    {
+        $confirmedIds = array_intersect($this->getFriendsWithMeIds(), $this->getMyFriendsIds());
+
+        return $confirmedIds;
+    }
+
+    public function getNotConfirmedFriendsIds()
+    {
+        $notConfirmedIds = array_diff($this->getFriendsWithMeIds(), $this->getMyFriendsIds());
+
+        return $notConfirmedIds;
+    }
+
+
 }

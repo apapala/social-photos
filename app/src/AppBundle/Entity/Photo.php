@@ -171,4 +171,5 @@ class Photo
     {
         return $this->thumbnail;
     }
+
 }

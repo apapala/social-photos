@@ -7,7 +7,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 class FriendVoter extends Voter {
 
-    const FRIEND = 'friend';
+    const FRIEND = 'FRIEND';
 
     /**
      * Determines if the attribute and subject are supported by this voter.
