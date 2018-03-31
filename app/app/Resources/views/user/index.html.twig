@@ -80,6 +80,8 @@
 
                                                     {% if app.user.id == user.id %}
 
+                                                        <button class="btn btn-success btn-xs">You</button>
+
                                                     {% else %}
                                                         {% if user in app.user.myFriends and app.user in user.myFriends %}
                                                             {#true friends#}

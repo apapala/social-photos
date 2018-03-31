@@ -68,6 +68,14 @@ RUN echo "xdebug.remote_connect_back=1" >> /usr/local/etc/php/conf.d/docker-php-
 RUN echo "xdebug.idekey=\"PHPSTORM\"" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 RUN echo "xdebug.remote_port=9001" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
+# APCu
+RUN pecl install -f apcu
+RUN echo "extension=apcu.so" >> /usr/local/etc/php/conf.d/apcu.ini
+RUN pecl install -f APCu-5.1.11
+
+# opcache
+RUN docker-php-ext-install opcache
+
 # Enable rewrite mode in apache
 RUN a2enmod rewrite
 
