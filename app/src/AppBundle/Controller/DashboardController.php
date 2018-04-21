@@ -36,10 +36,10 @@ class DashboardController extends Controller
 
         // Get all tags from UserTagPhotoRepository where user_id is in my friends
         // No matter what photo, currently user that creates tags can do that only during creation of photo
-        $tagOccurances = $userTagPhotoRepository->findAllTagsByUsers($userRepository->getFriendsIdsOfUser($user));
+        $tagOccurrences = $userTagPhotoRepository->findAllTagsByUsers($userRepository->getFriendsIdsOfUser($user));
 
         return $this->render('dashboard/index.html.twig', [
-            'tagOccurances' => $tagOccurances
+            'tagOccurrences' => $tagOccurrences
         ]);
     }
 }

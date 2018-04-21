@@ -8,6 +8,7 @@ use AppBundle\Entity\UserGradePhoto;
 use AppBundle\Entity\UserTagPhoto;
 use AppBundle\Form\PhotoType;
 use AppBundle\Form\UserGradePhotoType;
+use AppBundle\Form\UserTagPhotoType;
 use AppBundle\Service\AccessManager;
 use AppBundle\Service\FileManager;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -226,7 +227,13 @@ class PhotoController extends Controller
             return $this->redirectToRoute('photo_index');
         }
 
-        $userGradePhotoRepository = $this->getDoctrine()->getRepository(UserGradePhoto::class);
+        // $userTagPhotoRepository = $this->getDoctrine()->getRepository(UserTagPhoto::class);
+
+        $userTagPhoto = new UserTagPhoto();
+        $userTagPhotoForm = $this->createForm(UserTagPhotoType::class, $userTagPhoto, [
+            'action' => $this->generateUrl('photo_tag', ['photo' => $photo->getId()]),
+            'method' => 'POST',
+        ]);
 
         $userGradePhoto = new UserGradePhoto();
         $userGradePhotoForm = $this->createForm(UserGradePhotoType::class, $userGradePhoto, [
@@ -234,17 +241,23 @@ class PhotoController extends Controller
             'method' => 'POST',
         ]);
 
+        $userGradePhotoRepository = $this->getDoctrine()->getRepository(UserGradePhoto::class);
+        $userTagPhotoRepository = $this->getDoctrine()->getRepository(UserTagPhoto::class);
+
         $averageGrade = $userGradePhotoRepository->getAverageGradeOfPhoto($photo);
         $numberOfGradesOfPhoto = $userGradePhotoRepository->getNumberOfGradesOfPhoto($photo);
 
         $userGradePhoto = $userGradePhotoRepository->findOneByPhotoAndUser($photo, $this->getUser());
+        $userTagPhoto = $userTagPhotoRepository->findByPhotoAndUser($photo, $this->getUser());
 
         return $this->render('photo/show.html.twig', array(
             'photo' => $photo,
             'userGradePhotoForm' => $userGradePhotoForm->createView(),
+            'userTagPhotoForm' => $userTagPhotoForm->createView(),
             'userGradePhoto' => $userGradePhoto,
             'averageGrade' => $averageGrade,
-            'numberOfGradesOfPhoto' => $numberOfGradesOfPhoto
+            'numberOfGradesOfPhoto' => $numberOfGradesOfPhoto,
+            'userTagPhoto' => $userTagPhoto
         ));
     }
 
@@ -293,4 +306,37 @@ class PhotoController extends Controller
 
     }
 
+
+    /**
+     * Finds and displays a photo entity.
+     *
+     * @Route("/{photo}/tag", name="photo_tag", requirements={"photo"="\d+"})
+     * @Method("POST")
+     */
+    public function tagPhotoAction(Request $request, Photo $photo)
+    {
+        $userTagPhoto = new UserTagPhoto();
+        $userTagPhotoForm = $this->createForm(UserTagPhotoType::class, $userTagPhoto, [
+            'action' => $this->generateUrl('photo_tag', ['photo' => $photo->getId()]),
+            'method' => 'POST',
+        ]);
+
+        $userTagPhotoForm->handleRequest($request);
+
+        if ($userTagPhotoForm->isValid() && $userTagPhotoForm->isSubmitted()) {
+
+            // Save tags
+            if (!empty($userTagPhotoForm->get('tags')->getData())) {
+
+                $userTagPhotoRepository = $this->getDoctrine()->getRepository(UserTagPhoto::class);
+                $userTagPhotoRepository->addTagsToPhoto(explode(',', $userTagPhotoForm->get('tags')->getData()), $photo, $this->getUser(), true);
+
+            }
+
+        }
+
+        return $this->redirectToRoute('photo_show', array('photo' => $photo->getId()));
+    }
+
 }
+

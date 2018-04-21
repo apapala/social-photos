@@ -50,12 +50,63 @@
                                     {% endif %}
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-sm-3">
+
+
+                                    {% if userTagPhoto is empty %}
+                                        {{  form_start(userTagPhotoForm) }}
+                                        {{  form_widget(userTagPhotoForm) }}
+                                        <div>
+                                            <button class="btn btn-default submit" type="submit">Submit</button>
+                                        </div>
+                                        {{  form_end(userTagPhotoForm) }}
+                                    {% else %}
+
+                                        <p>You already tagged this photo with these tags:</p>
+
+                                        <ul>
+
+                                        {% for tag in userTagPhoto %}
+
+                                            <li>
+                                            <strong>{{ tag.getTag.name }}</strong>{#{{ loop.last ?: ',' }}#}
+                                            </li>
+                                        {% endfor %}
+
+                                        </ul>
+
+                                    {% endif %}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+
+{% endblock %}
+
+
+{% block javascripts %}
+
+    <!-- jQuery Tags Input -->
+    <script src="/gentelella/vendors/jquery.tagsinput/src/jquery.tagsinput.js"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function(){
+
+            $("#user_tag_photo_tags").tagsInput({
+                width: "auto",
+            });
+
+        });
+
+
+    </script>
 
 
 {% endblock %}

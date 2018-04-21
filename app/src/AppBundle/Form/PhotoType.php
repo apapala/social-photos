@@ -69,7 +69,6 @@ class PhotoType extends AbstractType
                 'mapped' => true,
                 'attr' => [],
                 'required' => false,
-
             ]);
 
         $builder->get('userTagPhotos')->addModelTransformer($this->userTagPhotosTransformer);

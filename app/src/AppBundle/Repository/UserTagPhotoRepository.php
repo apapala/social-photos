@@ -57,7 +57,7 @@ class UserTagPhotoRepository extends \Doctrine\ORM\EntityRepository
         $qb->getQuery()->getResult();
     }
 
-    public function addTagsToPhoto($tagsArray, Photo $photo, User $user)
+    public function addTagsToPhoto($tagsArray, Photo $photo, User $user, $withFlush = false)
     {
         $em = $this->getEntityManager();
 
@@ -70,9 +70,18 @@ class UserTagPhotoRepository extends \Doctrine\ORM\EntityRepository
             $userTagPhoto->setPhoto($photo);
             $userTagPhoto->setUser($user);
             $userTagPhoto->setTag($tag);
+
             $em->persist($userTagPhoto);
 
         }
+
+        if ($withFlush)
+            $em->flush();
+    }
+
+    public function findByPhotoAndUser(Photo $photo, User $user)
+    {
+        return $this->findBy(['photo' => $photo, 'user' => $user]);
     }
 
 }
