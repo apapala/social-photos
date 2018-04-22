@@ -6,6 +6,7 @@ use AppBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * PhotoRepository
@@ -33,6 +34,20 @@ class PhotoRepository extends \Doctrine\ORM\EntityRepository
                 )
             )
             ->setParameter('1', $confirmedUserIds)
+            ->getQuery()
+            ->getResult();
+
+        return $results;
+    }
+
+    public function findAllWhereCreator(User $user)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        $results = $qb->select('p')
+            ->from('AppBundle:Photo', 'p')
+            ->where('p.creator = ?1')
+            ->setParameter('1', [$user->getId()])
             ->getQuery()
             ->getResult();
 

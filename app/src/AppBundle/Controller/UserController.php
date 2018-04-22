@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
 use AppBundle\Entity\UserFriend;
+use AppBundle\Service\FriendManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -15,6 +16,22 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
  */
 class UserController extends Controller
 {
+
+
+    /**
+     * @var FriendManager
+     */
+    private $friendManager;
+
+    /**
+     * UserController constructor.
+     * @param FriendManager $friendManager
+     */
+    public function __construct(FriendManager $friendManager)
+    {
+        $this->friendManager = $friendManager;
+    }
+
     /**
      * Lists all user entities.
      *
@@ -59,17 +76,13 @@ class UserController extends Controller
     {
         $currentUser = $this->getUser();
 
-        $currentUser->addMyFriend($user);
-
-        $em = $this->getDoctrine()->getManager();
-
-        $em->flush($currentUser);
+        $this->friendManager->makeFriend($user, $currentUser, true);
 
         return $this->redirectToRoute('user_index');
     }
 
     /**
-     * Makes friend with another user
+     * Remove user from friend list and current user from users friend list
      *
      * @Route("/{id}/remove-friend", name="user_remove_friend")
      * @Method("GET")
@@ -80,10 +93,7 @@ class UserController extends Controller
     {
         $currentUser = $this->getUser();
 
-        $currentUser->removeMyFriend($user);
-
-        $em = $this->getDoctrine()->getManager();
-        $em->flush($currentUser);
+        $this->friendManager->removeFriend($currentUser, $user, true);
 
         return $this->redirectToRoute('user_index');
     }

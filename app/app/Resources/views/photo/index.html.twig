@@ -86,7 +86,7 @@
                                                         <div></div>
 
                                                         <a href="{{ path('photo_show', {'photo' : photo.id}) }}" type="button" class="btn btn-primary btn-xs">Show</a>
-                                                        {% if is_granted('OWNER', photo) %}
+                                                        {% if is_granted('CREATOR', photo) %}
                                                             <a href="{{ path('photo_edit', {'photo' : photo.id}) }}" type="button" class="btn btn-primary btn-xs">Edit</a>
                                                         {% endif %}
                                                     </td>

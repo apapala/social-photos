@@ -49,7 +49,13 @@ class PhotoController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $photos = $em->getRepository('AppBundle:Photo')->findAllWhereFriend($this->getUser());
+        $photoRepository = $em->getRepository('AppBundle:Photo');
+
+        $friendsPhotos = $photoRepository->findAllWhereFriend($this->getUser());
+
+        $currentUserPhotos = $photoRepository->findAllWhereCreator($this->getUser());
+
+        $photos = array_merge($friendsPhotos, $currentUserPhotos);
 
         return $this->render('photo/index.html.twig', array(
             'photos' => $photos,
@@ -57,7 +63,7 @@ class PhotoController extends Controller
     }
 
     /**
-     * Finds and displays a photo entity.
+     * Create photo
      *
      * @Route("/create", name="photo_create")
      * @Method({"GET", "POST"})
@@ -130,7 +136,7 @@ class PhotoController extends Controller
     }
 
     /**
-     * Finds and displays a photo entity.
+     * Edit photo
      *
      * @Route("/{photo}/edit", name="photo_edit")
      * @Method({"GET", "POST"})
@@ -262,7 +268,7 @@ class PhotoController extends Controller
     }
 
     /**
-     * Finds and displays a photo entity.
+     * Grade photo
      *
      * @Route("/{photo}/grade", name="photo_grade", requirements={"photo"="\d+"})
      * @Method("POST")
@@ -308,7 +314,7 @@ class PhotoController extends Controller
 
 
     /**
-     * Finds and displays a photo entity.
+     * Tag photo
      *
      * @Route("/{photo}/tag", name="photo_tag", requirements={"photo"="\d+"})
      * @Method("POST")

@@ -4,9 +4,9 @@ use AppBundle\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
-class FriendVoter extends Voter {
+class CreatorVoter extends Voter {
 
-    const FRIEND = 'FRIEND';
+    const CREATOR = 'CREATOR';
 
     /**
      * Determines if the attribute and subject are supported by this voter.
@@ -19,7 +19,7 @@ class FriendVoter extends Voter {
     protected function supports($attribute, $subject)
     {
         // if the attribute isn't one we support, return false
-        if (!in_array($attribute, [self::FRIEND])) {
+        if (!in_array($attribute, [self::CREATOR])) {
             return false;
         }
 
@@ -47,14 +47,6 @@ class FriendVoter extends Voter {
             return false;
         }
 
-        // If $subject is instance of User, then we check whether this user is friend with currently logged in user
-        if ($subject instanceof User) {
-
-            // Check if currently logged in user is friend of provided $user
-            return $this->checkIfFriends($subject, $user);
-        }
-
-        // If $subject is other entity, then we check whether currently logged in user is friend of this entitys creator.
         if (method_exists($subject, 'getCreator')) {
 
             $subjectCreator = $subject->getCreator();
@@ -69,27 +61,23 @@ class FriendVoter extends Voter {
             throw new \Exception('Subject entity must have getCreator() method defined');
         }
 
-        // If $subject creator is the same as logged in user then allow access
-        if ($subject->getId() == $user->getId()) {
-            return true;
-        }
-
         switch ($attribute) {
-            case self::FRIEND:
-                return $this->checkIfFriends($subject, $user);
+            case self::CREATOR:
+                return $this->checkIfCreator($subject, $user);
         }
     }
 
     /**
-     * Check if $subject is friend with provided User and if that user is friend with a $subject
+     * Checks if $subject creator id is same as current user id
      *
      * @param $subject
      * @param $user
      * @return bool
      */
-    private function checkIfFriends($subject, $user)
+    private function checkIfCreator($subject, $user)
     {
-        if ($subject->getMyFriends()->contains($user) && $user->getMyFriends()->contains($subject)) {
+
+        if ($subject->getId() === $user->getId()) {
             return true;
         }
 

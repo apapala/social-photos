@@ -46,3 +46,7 @@ services:
         arguments:
             - "@service_container"
 
+    AppBundle\Services\FriendManager:
+        class: AppBundle\Services\FriendManager
+        arguments:
+            - "@service_container"
